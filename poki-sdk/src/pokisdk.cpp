@@ -18,7 +18,6 @@ enum PokiRewardedBreakResult
 {
     REWARDED_BREAK_ERROR = 0,
     REWARDED_BREAK_SUCCESS = 1,
-    REWARDED_BREAK_START = 2,
 };
 
 typedef void (*CommercialBreakCallback)();
@@ -79,15 +78,9 @@ static void PokiSdk_InvokeCallback(PokiCallbackType callbackType, int intArg, co
 
     int numOfArgs = 0;
 
-    bool destroy_callback = true;
-
     if (callbackType == TYPE_REWARDED)
     {
-        // do not destroy the callback if the event is REWARDED_BREAK_START
-        // since we need to use the callback later when the event
-        // is REWARDED_BREAK_SUCCESS
-        destroy_callback = (intArg != REWARDED_BREAK_START);
-        lua_pushnumber(L, intArg);
+        lua_pushboolean(L, intArg);
         numOfArgs = 1;
     }
     else if (callbackType == TYPE_SHARABLE_URL)
@@ -102,7 +95,7 @@ static void PokiSdk_InvokeCallback(PokiCallbackType callbackType, int intArg, co
 
     dmScript::TeardownCallback(pokiSdk_Callback);
 
-    if ((pokiSdk_Callback != 0x0) && destroy_callback)
+    if (pokiSdk_Callback != 0x0)
     {
         dmScript::DestroyCallback(pokiSdk_Callback);
         pokiSdk_Callback = 0x0;
@@ -302,7 +295,6 @@ static void LuaInit(lua_State* L)
 
     SETCONSTANT(REWARDED_BREAK_ERROR, REWARDED_BREAK_ERROR);
     SETCONSTANT(REWARDED_BREAK_SUCCESS, REWARDED_BREAK_SUCCESS);
-    SETCONSTANT(REWARDED_BREAK_START, REWARDED_BREAK_START);
 
     lua_pop(L, 1);
     assert(top == lua_gettop(L));

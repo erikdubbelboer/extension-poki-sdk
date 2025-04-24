@@ -7,7 +7,6 @@ var LibPokiSdk = {
         // must match PokiRewardedBreakResult
         REWARDED_BREAK_ERROR: 0,
         REWARDED_BREAK_SUCCESS: 1,
-        REWARDED_BREAK_START: 2,
 
         _callback: null,
         _urlCallback: null,
@@ -20,11 +19,6 @@ var LibPokiSdk = {
 
         _rewardedBreakCallback: function(success) {
             var msg = success ? PokiSdk.REWARDED_BREAK_SUCCESS : PokiSdk.REWARDED_BREAK_ERROR; 
-            {{{ makeDynCall("vi", "PokiSdk._callback")}}}(msg);
-        },
-
-        _rewardedBreakStartedCallback: function() {
-            var msg = PokiSdk.REWARDED_BREAK_START; 
             {{{ makeDynCall("vi", "PokiSdk._callback")}}}(msg);
         },
 
@@ -44,7 +38,6 @@ var LibPokiSdk = {
         PokiSdk._callback = callback;
         let options = {
             size: UTF8ToString(size),
-            onStart: PokiSdk._rewardedBreakStartedCallback,
         }
         PokiSDK.rewardedBreak(options).then(PokiSdk._rewardedBreakCallback);
     },

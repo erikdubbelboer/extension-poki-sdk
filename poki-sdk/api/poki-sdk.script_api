@@ -85,7 +85,5 @@
     type: number
   - name: REWARDED_BREAK_SUCCESS
     type: number
-  - name: REWARDED_BREAK_START
-    type: number
 
 #*****************************************************************************************************
